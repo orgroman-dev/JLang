@@ -6,6 +6,6 @@
 	path = lib/javacpp-presets
 	url = https://github.com/gharrma/javacpp-presets
 	branch = master
-[submodule "jdk/jdk"]
-	path = jdk/jdk
-	url = https://github.com/openjdk/jdk.git
+[submodule "jdk"]
+	path = jdk
+	url = https://github.com/openjdk/jdk
