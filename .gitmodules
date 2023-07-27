@@ -10,3 +10,4 @@
 [submodule "jdk"]
 	path = jdk
 	url = https://github.com/openjdk/jdk
+	branch = jdk-11+28
