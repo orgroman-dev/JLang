@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if ! which ant &>/dev/null
 then
     echo "- ant not found. Is ANT installed?"
@@ -6,19 +7,21 @@ then
 else
     echo "+ ant found"
 fi
-if [[ -z "$JDK7" ]]
+
+if ! which java &>/dev/null
 then
-  echo "- JDK7 environment variable must point to an installation of JDK 7"
-  exit 1
+    echo "- java not found. Is Java installed?"
+    exit 1
+else
+    echo "+ java found"
 fi
 
-if [[ -r "$JDK7/bin/javac" ]]
+if ! which javac &>/dev/null
 then
-  echo "+ JDK 7 found"
+    echo "- javac not found. Is JDK installed?"
+    exit 1
 else
-  echo "- JDK 7 compiler not found at "$(JDK7)/bin/javac
-  echo "  JDK7 is not installed or the JDK7 environment variable is set incorrectly"
-  exit 1
+    echo "+ JDK found"
 fi
 
 if git lfs install 2>&1 >/dev/null
@@ -33,12 +36,9 @@ llvm_version="`$LLC -version | egrep LLVM.version | awk '{print $3}'`"
 if [[ -z "$llvm_version" ]]
 then
   echo "- llc not found. Is LLVM installed and llc in the current path?"
+else
+  echo "+ LLVM version is: $llvm_version"
 fi
-
-case "$llvm_version" in
-  [5]*) echo "+ LLVM version is up to date: $llvm_version";;
-  *) echo "- LLVM version is out of date (or too new): $llvm_version"; exit 1;;
-esac
 
 clang_version="`$CLANG --version | egrep clang.version | awk '{print $3}' | awk -F'-' '{print $1}'`"
 
@@ -46,6 +46,8 @@ if [[ "$llvm_version" != "$clang_version" ]]
 then
   echo "- llc and clang versions do not match: $llvm_version vs $clang_version"
   exit 1
+else
+  echo "+ llc and clang versions match: $llvm_version"
 fi
 
 if [[ $(uname) == "Linux" ]]
@@ -61,7 +63,7 @@ fi
 
 if ! eval $LGC_CHECK_CMD
 then
-    echo "- The Boehm-Demers-Weiser garbace collector (libgc) is not installed as a shared library"
+    echo "- The Boehm-Demers-Weiser garbage collector (libgc) is not installed as a shared library"
     exit 1
 else
     echo "+ Found libgc shared library"

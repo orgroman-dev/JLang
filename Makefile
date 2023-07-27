@@ -18,16 +18,12 @@ export PLC := $(realpath bin/jlangc)
 export PLC_SRC := $(realpath $(shell find compiler/src -name "*.java"))
 
 # System JDK.
-ifndef JDK7
-$(error Please point the JDK7 environment variable to your system JDK 7)
-endif
-export JDK7 := $(realpath $(JDK7))
-export JAVAC := $(JDK7)/bin/javac
+export JAVAC := javac
 export JNI_INCLUDES := \
-	-I"$(JDK7)/include" \
-	-I"$(JDK7)/include/darwin" \
-	-I"$(JDK7)/include/linux"
-export JDK7_LIB_PATH := $(JDK7)/jre/lib
+	-I"$(JAVA_HOME)/include" \
+	-I"$(JAVA_HOME)/include/darwin" \
+	-I"$(JAVA_HOME)/include/linux"
+export JDK_LIB_PATH := $(JAVA_HOME)/jre/lib
 
 JDK ?= jdk
 export JDK := $(realpath $(JDK))
@@ -70,7 +66,7 @@ setup:
 	@echo "--- Checking setup ---"
 	@./bin/check-setup.sh
 
-# Compiler.
+# Compiler.f
 compiler: polyglot
 	@echo "--- Building compiler ---"
 	@ant -S
